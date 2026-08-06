@@ -1,92 +1,78 @@
-# solari
+# ✨ Solari // Cosmic Sarcastic Diagnostics
 
-Simple ReAct agent
-Agent generated with `agents-cli` version `1.2.1`
+> "Your telemetry has arrived. It's aggressively mediocre, just like your sleep hygiene."
 
-## Project Structure
+**Solari** is a high-fidelity, futuristic AI agent designed with an ultra-premium, dark-cyberpunk purple aesthetic. Created by an Interaction Design student, it bridges the gap between state-of-the-art AI tooling and gorgeous, sensory-rich human-computer interaction (HCI).
 
-```
-solari/
-├── app/         # Core agent code
-│   ├── agent.py               # Main agent logic
-│   ├── fast_api_app.py        # FastAPI Backend server
-│   └── app_utils/             # App utilities and helpers
-├── tests/                     # Unit, integration, and load tests
-├── GEMINI.md                  # AI-assisted development guide
-└── pyproject.toml             # Project dependencies
-```
-
-> 💡 **Tip:** Use [Antigravity CLI](https://antigravity.google/) for AI-assisted development - project context is pre-configured in `GEMINI.md`.
-
-## Requirements
-
-Before you begin, ensure you have:
-- **uv**: Python package manager (used for all dependency management in this project) - [Install](https://docs.astral.sh/uv/getting-started/installation/) ([add packages](https://docs.astral.sh/uv/concepts/dependencies/) with `uv add <package>`)
-- **agents-cli**: Agents CLI - Install with `uv tool install google-agents-cli`
-- **Google Cloud SDK**: For GCP services - [Install](https://cloud.google.com/sdk/docs/install)
-
-
-## Quick Start
-
-Install `agents-cli` and its skills if not already installed:
-
-```bash
-uvx google-agents-cli setup
-```
-
-Install required packages:
-
-```bash
-agents-cli install
-```
-
-Test the agent with a local web server:
-
-```bash
-agents-cli playground
-```
-
-You can also use features from the [ADK](https://adk.dev/) CLI with `uv run adk`.
-
-## Commands
-
-| Command              | Description                                                                                 |
-| -------------------- | ------------------------------------------------------------------------------------------- |
-| `agents-cli install` | Install dependencies using uv                                                         |
-| `agents-cli playground` | Launch local development environment                                                  |
-| `agents-cli lint`    | Run code quality checks                                                               |
-| `agents-cli eval`    | Evaluate agent behavior (generate, grade, analyze, and more — see `agents-cli eval --help`) |
-| `uv run pytest tests/unit tests/integration` | Run unit and integration tests                                                        || [A2A Inspector](https://github.com/a2aproject/a2a-inspector) | Launch A2A Protocol Inspector                                                        |
-
-## 🛠️ Project Management
-
-| Command | What It Does |
-|---------|--------------|
-| `agents-cli scaffold enhance` | Add CI/CD pipelines and Terraform infrastructure |
-| `agents-cli infra cicd` | One-command setup of entire CI/CD pipeline + infrastructure |
-| `agents-cli scaffold upgrade` | Auto-upgrade to latest version while preserving customizations |
+Solari functions as a sarcastic morning synopsis assistant. It analyzes your wake-up time and self-reported energy levels to deliver wit-infused daily diagnostics, roasts, and productivity tips.
 
 ---
 
-## Development
+## 🎨 Interaction Design Highlights
 
-Edit your agent logic in `app/agent.py` and test with `agents-cli playground` - it auto-reloads on save.
+Designed from the ground up to wow users at first glance, the dashboard incorporates modern AI design trends:
+- **Neon-Purple Cosmic Palette**: Built on deep obsidian bases (`#05030f`) with glowing amethyst, vibrant cyber-pink, and starry blue gradient overlays.
+- **Glassmorphic Panels**: High-end frosted glass panes (`backdrop-filter: blur(25px)`) with razor-sharp neon borders to give depth and contrast.
+- **Active Morphing Shapes**: Fluid SVG shapes animating smoothly in the header.
+- **Micro-Animations & Feedback**: Hover transitions on interactive scale selectors, active scaling, typing bubbles, and neon pulsed states.
+- **Split-Pane Layout**: An intuitive split layout showing telemetry input/diagnostics on the left and a continuous, responsive conversation workspace on the right.
 
-## Deployment
+---
 
-```bash
-gcloud config set project <your-project-id>
-agents-cli deploy
+## 🛠️ Technology Stack
+
+- **Engine**: Gemini LLM via the Google Agent Development Kit (ADK)
+- **Framework**: Python FastAPI
+- **Server**: Standalone ASGI Uvicorn gateway (bound to `0.0.0.0` on port `8080` for cloud connectivity)
+- **Frontend**: Vanilla HTML5 / Modern CSS (Custom Design System) / JavaScript (Asynchronous client API integration)
+
+---
+
+## 📂 Project Structure
+
+```text
+solari/
+├── app/
+│   ├── agent.py               # Solari's sarcastic instructions & tool definitions
+│   ├── custom_web_server.py   # Standalone web gateway (serves UI & hosts API)
+│   ├── fast_api_app.py        # Default ADK backend definition
+│   └── static/
+│       └── index.html         # The premium, purple cyberpunk dashboard UI
+├── GEMINI.md                  # Development guide & system context
+├── pyproject.toml             # Python dependency manifest
+└── uv.lock                    # Dependency lockfile
 ```
 
-To add CI/CD and Terraform, run `agents-cli scaffold enhance`.
-To set up your production infrastructure, run `agents-cli infra cicd`.
+---
 
-## Observability
+## 🚀 Quick Start (Running Locally)
 
-Built-in telemetry exports to Cloud Trace, BigQuery, and Cloud Logging.
+Get the project running on your machine in seconds:
 
-## A2A Inspector
+### 1. Install Dependencies
+Make sure you have [uv](https://docs.astral.sh/uv/) installed, then run:
+```bash
+uv pip install -r pyproject.toml
+```
 
-This agent supports the [A2A Protocol](https://a2a-protocol.org/). Use the [A2A Inspector](https://github.com/a2aproject/a2a-inspector) to test interoperability.
-See the [A2A Inspector docs](https://github.com/a2aproject/a2a-inspector) for details.
+### 2. Configure Your Gemini Key
+Create a `.env` file in the project root and add your Gemini API Key:
+```text
+GEMINI_API_KEY=your_api_key_here
+```
+
+### 3. Launch the Cosmic Dashboard
+Run the standalone custom server:
+```bash
+uv run python -m app.custom_web_server
+```
+
+### 4. Experience Solari
+Open your browser and navigate to:
+👉 **[http://localhost:8080](http://localhost:8080)**
+
+---
+
+## 🤖 Solari's Core Agent Design
+
+Solari is built using a custom system instruction prompt that infuses it with a dry, humorous, and highly sarcastic personality. It leverages a custom tool function `analyze_morning_analytics` which handles raw numeric ratings (1–5) and maps them to specialized diagnostic classes (Zombie, Sleepy, Mediocre, Decent, Stellar) before applying Gemini's reasoning to roast your morning.
