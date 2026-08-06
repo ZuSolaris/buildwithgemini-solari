@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solari // Sarcastic Cosmic Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #05030f;
+            --panel-bg: rgba(13, 9, 33, 0.7);
+            --border-color: rgba(139, 92, 246, 0.15);
+            --cyber-purple: #8b5cf6;
+            --cyber-pink: #ec4899;
+            --cyber-blue: #3b82f6;
+            --cyber-glow: rgba(139, 92, 246, 0.35);
+            --text-main: #f1f0fb;
+            --text-muted: #9f9cb6;
+            --user-bubble: linear-gradient(135deg, #a855f7, #6366f1);
+            --solari-bubble: rgba(139, 92, 246, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.1) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            background: rgba(5, 3, 15, 0.85);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 2.75rem;
+            height: 2.75rem;
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-pink));
+            border-radius: 35% 65% 65% 35% / 35% 35% 65% 65%;
+            box-shadow: 0 0 20px var(--cyber-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            animation: morphing 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes morphing {
+            0% { border-radius: 35% 65% 65% 35% / 35% 35% 65% 65%; }
+            100% { border-radius: 65% 35% 35% 65% / 65% 65% 35% 35%; }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 40%, var(--cyber-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 1.5rem;
+            max-width: 1400px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 1000px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyber-purple), var(--cyber-pink), transparent);
+        }
+
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--cyber-purple);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"], input[type="time"] {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 0.85rem;
+            padding: 0.85rem 1.25rem;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="time"]:focus {
+            outline: none;
+            border-color: var(--cyber-purple);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.25);
+        }
+
+        .scale-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+
+        .scale-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(139, 92, 246, 0.12);
+            border-radius: 0.85rem;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            padding: 0.75rem 0;
+        }
+
+        .scale-btn span {
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .scale-btn:hover {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: var(--cyber-purple);
+            transform: translateY(-2px);
+        }
+
+        .scale-btn.active {
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-pink));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            transform: scale(1.05);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-pink));
+            border: none;
+            border-radius: 0.85rem;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            height: calc(100vh - 12rem);
+            min-height: 550px;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyber-pink), var(--cyber-purple), transparent);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 1.1rem 1.4rem;
+            border-radius: 1.25rem;
+            line-height: 1.6;
+            animation: bubbleEntrance 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        @keyframes bubbleEntrance {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .message-bubble.user {
+            align-self: flex-end;
+            background: var(--user-bubble);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);
+        }
+
+        .message-bubble.solari {
+            align-self: flex-start;
+            background: var(--solari-bubble);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            color: var(--text-main);
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .message-sender {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .user .message-sender {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .solari .message-sender {
+            color: var(--cyber-pink);
+            text-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            background: rgba(5, 3, 15, 0.6);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 0.85rem;
+            padding: 1rem 1.4rem;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--cyber-purple);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-send {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 0.85rem;
+            color: var(--cyber-purple);
+            width: 3.4rem;
+            height: 3.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-send:hover {
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-pink));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 15px var(--cyber-glow);
+            transform: scale(1.05);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: var(--solari-bubble);
+            border: 1px solid rgba(139, 92, 246, 0.12);
+            padding: 1.1rem 1.5rem;
+            border-radius: 1.25rem;
+            border-bottom-left-radius: 0.25rem;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .typing-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: var(--cyber-pink);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: blink 1.4s infinite both;
+            box-shadow: 0 0 8px var(--cyber-pink);
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0% { opacity: 0.4; transform: scale(1); }
+            20% { opacity: 1; transform: scale(1.25); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        .quote-banner {
+            grid-column: 1 / -1;
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.08), rgba(236, 72, 153, 0.08));
+            border: 1px dashed rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--cyber-pink);
+            text-shadow: 0 0 10px rgba(236, 72, 153, 0.2);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">✨</div>
+            <div>
+                <h1>SOLARI // AI</h1>
+                <div class="subtitle">Cosmic Sarcastic Diagnostics & Analytics</div>
+            </div>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-align: right; font-family: 'Space Grotesk', sans-serif;">
+            QUANTUM PROTO-UI v2.0<br/>
+            <span style="color: #c084fc; text-shadow: 0 0 10px rgba(192, 132, 252, 0.4);">● Cosmic Connection Engaged</span>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <div class="quote-banner" id="quote-banner">
+            "Your telemetry has arrived. It's aggressively mediocre, just like your sleep hygiene."
+        </div>
+
+        <div class="card">
+            <div class="card-title">🔮 Quantum Diagnostics</div>
+            
+            <div class="form-group">
+                <label for="wake-time">Wake up timestamp</label>
+                <input type="time" id="wake-time" value="07:30">
+            </div>
+
+            <div class="form-group">
+                <label>Energy level index (1-5)</label>
+                <div class="scale-selector">
+                    <button class="scale-btn" data-val="1">🧟<span>Dead</span></button>
+                    <button class="scale-btn" data-val="2">🥱<span>Low</span></button>
+                    <button class="scale-btn active" data-val="3">😐<span>Avg</span></button>
+                    <button class="scale-btn" data-val="4">😎<span>High</span></button>
+                    <button class="scale-btn" data-val="5">🚀<span>God</span></button>
+                </div>
+            </div>
+
+            <button class="btn-submit" id="btn-submit-analytics">
+                ⚡ Process Diagnostics
+            </button>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message-bubble solari">
+                    <div class="message-sender">Solari</div>
+                    Oh, wonderful. Another human entity wanting me to analyze their carbon-based diagnostics. Submit your coordinates on the left or type your query below so I can adequately judge your existence.
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Type a message to Solari...">
+                <button class="btn-send" id="btn-send">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const btnSend = document.getElementById('btn-send');
+        const btnSubmitAnalytics = document.getElementById('btn-submit-analytics');
+        const wakeTimeInput = document.getElementById('wake-time');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const quoteBanner = document.getElementById('quote-banner');
+
+        let currentScaleValue = 3;
+        let sessionId = `session-${Math.random().toString(36).substr(2, 9)}`;
+
+        const quotes = [
+            "Your telemetry has arrived. It's aggressively mediocre, just like your sleep hygiene.",
+            "Analyzing your data... Have you considered sleeping earlier, or is screen time your true master?",
+            "A scale of 1 to 5, and yet you still find a way to underperform.",
+            "The world has updated, but your motivation level seems stuck in 1998.",
+            "Waking up is the first mistake. Let's see what else you do wrong today."
+        ];
+
+        // Handle feel scale selection
+        document.querySelectorAll('.scale-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentScaleValue = parseInt(btn.getAttribute('data-val'));
+                
+                // Update quote banner on click
+                quoteBanner.innerText = quotes[currentScaleValue - 1] || quotes[0];
+            });
+        });
+
+        function appendMessage(sender, text) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('message-bubble', sender.toLowerCase());
+            
+            const senderSpan = document.createElement('div');
+            senderSpan.classList.add('message-sender');
+            senderSpan.innerText = sender;
+            
+            const textContent = document.createElement('div');
+            textContent.innerHTML = text.replace(/\n/g, '<br/>').replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+            
+            bubble.appendChild(senderSpan);
+            bubble.appendChild(textContent);
+            chatMessages.appendChild(bubble);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessageToAgent(messageText) {
+            typingIndicator.style.display = 'flex';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/run', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appName: "solari",
+                        sessionId: sessionId,
+                        newMessage: {
+                            role: "user",
+                            parts: [
+                                { text: messageText }
+                            ]
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                let solariReply = "";
+                if (data && data.length > 0) {
+                    const lastEvent = data[data.length - 1];
+                    if (lastEvent.response && lastEvent.response.candidates && lastEvent.response.candidates[0].content) {
+                        const parts = lastEvent.response.candidates[0].content.parts;
+                        solariReply = parts.map(p => p.text).join("\n");
+                    }
+                }
+                
+                if (!solariReply) {
+                    for (const event of data) {
+                        if (event.response && event.response.candidates) {
+                            const part = event.response.candidates[0].content.parts[0];
+                            if (part && part.text) {
+                                solariReply = part.text;
+                            }
+                        }
+                    }
+                }
+
+                if (!solariReply) {
+                    solariReply = "Error: Solari gave you the silent treatment. Try again.";
+                }
+
+                typingIndicator.style.display = 'none';
+                appendMessage('Solari', solariReply);
+
+            } catch (err) {
+                typingIndicator.style.display = 'none';
+                appendMessage('Solari', `Quantum systems failure. Probably user error. (Details: ${err.message})`);
+                console.error(err);
+            }
+        }
+
+        btnSend.addEventListener('click', () => {
+            const text = chatInput.value.trim();
+            if (text) {
+                appendMessage('You', text);
+                chatInput.value = '';
+                sendMessageToAgent(text);
+            }
+        });
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                btnSend.click();
+            }
+        });
+
+        btnSubmitAnalytics.addEventListener('click', () => {
+            const timeVal = wakeTimeInput.value;
+            const [hours, minutes] = timeVal.split(':');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            const formattedTime = `${displayHours}:${minutes} ${ampm}`;
+
+            const promptMessage = `I woke up at ${formattedTime} and I feel like a ${currentScaleValue} today. Give me my analytics and morning roast report!`;
+            
+            appendMessage('You', `Diagnostics Log: Woke up at ${formattedTime}, wellness rating ${currentScaleValue}/5.`);
+            sendMessageToAgent(promptMessage);
+        });
+    </script>
+</body>
+</html>
