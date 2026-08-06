@@ -33,7 +33,7 @@ _, project_id = google.auth.default()
 logging_client = google_cloud_logging.Client()
 logger = logging_client.logger(__name__)
 allow_origins = (
-    os.getenv("ALLOW_ORIGINS", "").split(",") if os.getenv("ALLOW_ORIGINS") else None
+    os.getenv("ALLOW_ORIGINS", "").split(",") if os.getenv("ALLOW_ORIGINS") else ["*"]
 )
 
 AGENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,7 +66,7 @@ from fastapi.staticfiles import StaticFiles
 
 app: FastAPI = get_fast_api_app(
     agents_dir=AGENT_DIR,
-    web=True,
+    web=False,
     artifact_service_uri=services.ARTIFACT_SERVICE_URI,
     allow_origins=allow_origins,
     session_service_uri=services.SESSION_SERVICE_URI,

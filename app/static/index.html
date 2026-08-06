@@ -556,18 +556,38 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+        let sessionInitialized = false;
+
+        async function ensureSession() {
+            if (sessionInitialized) return;
+            try {
+                await fetch(`/apps/app/users/user/sessions/${sessionId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                sessionInitialized = true;
+            } catch (err) {
+                console.error("Auto session initialization failed:", err);
+            }
+        }
+
         async function sendMessageToAgent(messageText) {
             typingIndicator.style.display = 'flex';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
+                // Ensure session exists on the ADK server
+                await ensureSession();
+
                 const response = await fetch('/run', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        appName: "solari",
+                        appName: "app",
+                        userId: "user",
                         sessionId: sessionId,
                         newMessage: {
                             role: "user",
@@ -586,19 +606,28 @@
                 
                 let solariReply = "";
                 if (data && data.length > 0) {
-                    const lastEvent = data[data.length - 1];
-                    if (lastEvent.response && lastEvent.response.candidates && lastEvent.response.candidates[0].content) {
-                        const parts = lastEvent.response.candidates[0].content.parts;
-                        solariReply = parts.map(p => p.text).join("\n");
+                    // Try parsing ADK direct content first (most reliable)
+                    for (let i = data.length - 1; i >= 0; i--) {
+                        const event = data[i];
+                        if (event.content && event.content.parts && event.content.parts.length > 0) {
+                            const candidateReply = event.content.parts.map(p => p.text || "").join("\n").trim();
+                            if (candidateReply) {
+                                solariReply = candidateReply;
+                                break;
+                            }
+                        }
                     }
-                }
-                
-                if (!solariReply) {
-                    for (const event of data) {
-                        if (event.response && event.response.candidates) {
-                            const part = event.response.candidates[0].content.parts[0];
-                            if (part && part.text) {
-                                solariReply = part.text;
+                    
+                    // Fallback to response.candidates format if needed
+                    if (!solariReply) {
+                        for (let i = data.length - 1; i >= 0; i--) {
+                            const event = data[i];
+                            if (event.response && event.response.candidates && event.response.candidates[0].content && event.response.candidates[0].content.parts) {
+                                const candidateReply = event.response.candidates[0].content.parts.map(p => p.text || "").join("\n").trim();
+                                if (candidateReply) {
+                                    solariReply = candidateReply;
+                                    break;
+                                }
                             }
                         }
                     }
